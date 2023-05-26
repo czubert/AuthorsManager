@@ -1,8 +1,8 @@
 import shutil
 import pandas as pd
 
-# import src.utils as utils
-import utils as utils
+import src.utils as utils
+# import utils as utils
 
 
 # Reading lists as DataFrames
@@ -10,7 +10,6 @@ def read_lists_as_df(file_names):
     lists_as_df = []
     for file_name in file_names:
         lists_as_df.append(utils.read_csv_as_df(file_name))
-        # todo check if this file already exists in "after_update" if yes then delete it
         shutil.move(file_name, 'after_update')
     return lists_as_df
 

@@ -11,6 +11,11 @@ def main():
 
     path_to_main = os.path.join(os.path.dirname(__file__), "vis.py")
 
+    # Force the opening (does not open automatically) of the browser tab before streamlit to let
+    # the streamlit server start.
+
+    webbrowser.open("http://localhost:8526")
+
     # Running streamlit server in a subprocess and writing to log file
     proc = Popen(
         [
@@ -25,7 +30,7 @@ def main():
             "--server.maxUploadSize=3000",
             "--global.developmentMode=false",
             "--client.showErrorDetails=false",
-            "--server.port=8502",
+            "--server.port=8526",
             "--theme.base=light",
         ],
         stdin=PIPE,
@@ -35,11 +40,6 @@ def main():
         env={'APP_PID': str(os.getpid()), **os.environ}
     )
     proc.stdin.close()
-
-    # Force the opening (does not open automatically) of the browser tab after a brief delay to let
-    # the streamlit server start.
-    time.sleep(5)
-    webbrowser.open("http://localhost:8502")
 
     while True:
         s = proc.stdout.read()
@@ -51,5 +51,5 @@ def main():
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.expanduser("~"))
+    # os.chdir(os.path.expanduser("~"))
     main()

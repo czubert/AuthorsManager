@@ -1,14 +1,19 @@
 import os
 import signal
-import streamlit as st
 
-# from src.main import AuthorList
-from main import AuthorList
+from src.main import AuthorList
+
+
+import streamlit as st
+st.set_page_config(layout="wide",
+                   page_title='SciAuthorManager',
+                   initial_sidebar_state='expanded'
+                   )
 
 
 def killing_button():
     st.sidebar.write("---")
-    cond = st.sidebar.button("Stop program", key='boom')
+    cond = st.sidebar.button("Stop program")
     if cond:
         os.kill(int(os.environ['APP_PID']), signal.SIGTERM)
         os.kill(os.getpid(), signal.SIGTERM)
@@ -16,7 +21,6 @@ def killing_button():
 
 if 'APP_PID' in os.environ:
     killing_button()
-
 
 authors = AuthorList()
 

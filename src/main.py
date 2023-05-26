@@ -1,10 +1,10 @@
 from datetime import datetime
 
-# import src.aggregate as aggregate
-# import src.utils as utils
+import src.aggregate as aggregate
+import src.utils as utils
 
-import aggregate as aggregate
-import utils as utils
+# import aggregate as aggregate
+# import utils as utils
 
 
 class AuthorList:
@@ -14,6 +14,7 @@ class AuthorList:
         self.file_names = None
         self.main_ready = False
         self.update_ready = False
+        self.pynsist_prefix = 'pkgs/src'
 
     def data_update(self):
         lists_as_df = aggregate.read_lists_as_df(self.file_names)
@@ -35,14 +36,14 @@ class AuthorList:
         # Store
         time = datetime.now()
         date_time = f'{time.year}-{time.month}-{time.day}_{time.hour}-{time.minute}-{time.second}'
-        file_name = f'src/to_send/{date_time}_{n_auth}_to_send'
+        file_name = f'{self.pynsist_prefix}/to_send/{date_time}_{n_auth}_to_send'
         self.not_sent.to_excel(f'{file_name}.xlsx', index=False, encoding='utf-8')
         self.main_file.update(self.not_sent, errors='ignore')
 
     def check_if_main_ready(self):
         # Checking if ready to get authors for emails sending
         # Reading parsed data
-        self.main_file = utils.read_csv_as_df('src/main_file.csv')
+        self.main_file = utils.read_csv_as_df(f'{self.pynsist_prefix}/database/main_file.csv')
         if not self.main_file.empty:
             self.main_ready = True
 
@@ -53,7 +54,7 @@ class AuthorList:
             self.update_ready = True
 
     def store_main_db(self):
-        self.main_file.to_csv(f'src/main_file.csv', index=False, encoding='utf-16')
+        self.main_file.to_csv(f'{self.pynsist_prefix}/database/main_file.csv', index=False, encoding='utf-16')
 
     def main(self):
         self.check_if_main_ready()
